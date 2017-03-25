@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use function Sodium\compare;
 use yii\base\Model;
 use common\models\User;
 
@@ -9,9 +10,14 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
-//    public $username;
+    public $firstname;
+    public $lastname;
+
+
     public $email;
     public $password;
+    public $password2;
+    public $bio;
 
 
     /**
@@ -20,19 +26,26 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-//            ['username', 'trim'],
-//            ['username', 'required'],
-//            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-//            ['username', 'string', 'min' => 2, 'max' => 255],
+            [['firstname', 'lastname', 'email', 'password', 'password2', 'bio'], 'required'],
+            ['firstname', 'string'],
+            ['firstname', 'match', 'pattern' => '/^[A-Z]\'?[-a-z]+$/'],
+
+
+            ['lastname', 'string'],
+            ['lastname', 'match', 'pattern' => '/^[A-Z]\'?[-a-z]+$/'],
 
             ['email', 'trim'],
-            ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
 
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            ['password', 'string', 'min' => 8],
+
+            ['password2', 'compare', 'compareAttribute' => 'password','message' => 'The passwords you entered do not match.'],
+            ['password2', 'string', 'min' => 8],
+
+            ['bio', 'string', 'max' => 140, 'message' => 'Please use no more than 140 characters'],
+            ['bio', 'trim'],
         ];
     }
 
@@ -48,11 +61,23 @@ class SignupForm extends Model
         }
         
         $user = new User();
-//        $user->username = $this->username;
+
+        $user->firstname = $this->firstname;
+        $user->lastname = $this->lastname;
         $user->email = $this->email;
+        $user->bio = $this->bio;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         
         return $user->save() ? $user : null;
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'firstname' => 'First Name',
+            'lastname' => 'Last Name',
+            'password2' => 'Repeat password',
+        ];
     }
 }
