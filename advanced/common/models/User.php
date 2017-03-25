@@ -1,28 +1,74 @@
 <?php
+
 namespace common\models;
 
 use Yii;
-use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * This is the model class for table "user".
  *
  * @property integer $id
- * @property string $username
+ * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
- * @property string $auth_key
+ * @property integer $balance
+ * @property integer $events_hosted
+ * @property integer $events_attended
+ * @property string $bio
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $firstname
+ * @property string $lastname
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+//            [['auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
+//            [['balance', 'events_hosted', 'events_attended', 'status', 'created_at', 'updated_at'], 'integer'],
+//            [['auth_key'], 'string', 'max' => 32],
+//            [['password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
+//            [['bio'], 'string', 'max' => 140],
+//            [['firstname', 'lastname'], 'string', 'max' => 50],
+//            [['email'], 'unique'],
+//            [['password_reset_token'], 'unique'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'balance' => 'Balance',
+            'events_hosted' => 'Events Hosted',
+            'events_attended' => 'Events Attended',
+            'bio' => 'Bio',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+        ];
+    }
+
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
@@ -48,17 +94,6 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
@@ -73,14 +108,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by email
      *
-     * @param string $username
+     * @param string $email
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByEmail($email)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
