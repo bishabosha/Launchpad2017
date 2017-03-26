@@ -74,10 +74,18 @@ $userId = \yii::$app->user->id;
 <?php else: ?>
 
     <span style="font-size: 1em;" class="label label-default">You're hosting the meal.</span>
-
     <div class="page-header">
-        <h3>Location</h3>
-        <p>You'll get the location when your invitation is accepted.</p>
+        <h3>Guests</h3>
+        <?php $requests = \common\models\Event::getAttendingFlat($userId); ?>
+        <?php foreach ($requests as $pair):?>
+            <?php
+            $user = $pair['user'];
+            $event = $pair['event'];
+            ?>
+            <hr/>
+            <p>Name: <?= $user->firstname . ' ' . $user->lastname ?></p>
+            <p>Rating: <?= $user->rating ?></p>
+        <?php endforeach;?>
     </div>
 
 <?php endif; ?>

@@ -105,4 +105,22 @@ class Event extends \yii\db\ActiveRecord
 
         return $usersEvents;
     }
+
+    public static function getAttendingFlat($userId) {
+        $events = Event::find()->where(['hostId' => $userId])->all();
+
+        $usersEvents = [];
+
+        foreach ($events as $event) {
+            $requests = $event->attendingArray;
+            foreach ($requests as $userId) {
+                $usersEvents[] = [
+                    'user' => User::findIdentity($userId),
+                    'event' => $event
+                ];
+            }
+        }
+
+        return $usersEvents;
+    }
 }
