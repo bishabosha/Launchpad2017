@@ -16,7 +16,7 @@ class EventCreateForm extends Model {
 
     public function rules(){
         return [
-            [['name', 'timestamp', 'price', 'capacity', 'addressId', 'description'], 'required'],
+            [['name', 'price', 'capacity', 'addressId', 'description'], 'required'],
             [['capacity', 'addressId'], 'integer'],
             ['price', 'double'],
             [['name', 'description'], 'string', 'max' => 255],
