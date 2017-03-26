@@ -17,27 +17,35 @@ use common\models\User;
     <div class="page-header">
         <h3>Stats</h3>
         <?php
-            echo "<p> Balance: ".$user->balance."</p>";
-            echo "<p> Events Hosted: ".$user->events_hosted."</p>";
-            echo "<p> Events Attended: ".$user->events_attended."</p>";
-            echo "<p> Rating: ". $user->rating."</p>";
-            echo "<p> Date Joined: ". substr($user->joined, 0, 10)."</p>";
+        echo '<label class="control-label">Rating</label>';
+        echo \kartik\rating\StarRating::widget([
+            'name' => 'rating_1',
+            'value' => $user->rating,
+            'pluginOptions' => [
+                'displayOnly' => true,
+                'size' => 'xs',
+            ]
+        ]);
+        echo '<label class="control-label">Date Joined</label>';
+        echo "<p>". substr($user->joined, 0, 10)."</p>";
+        echo '<label class="control-label">Balance</label>';
+        echo "<p>".$user->balance."</p>";
+        echo '<label class="control-label">Events Hosted</label>';
+        echo "<p>".$user->events_hosted."</p>";
+        echo '<label class="control-label">Events Attended</label>';
+        echo "<p>".$user->events_attended."</p>";
         ?>
     </div>
 
 
 
-    <div id="bio-section">
-        <div class="page-header">
-            <h3>Bio</h3>
-        </div>
+    <div class="page-header">
+        <h3>Bio</h3>
         <p> <?= $user->bio ?> </p>
     </div>
 
-    <div id="address-section">
-        <div class="page-header">
-            <h3>Addresses</h3>
-        </div>
+    <div class="page-header">
+        <h3>Addresses</h3>
         <?php $addresses = $user->getAddresses()->all(); ?>
         <?php foreach ($addresses as $address):?>
             <p><?= $address->name." ". $address->street1. ", ". $address->city.", ".$address->postcode?></p>

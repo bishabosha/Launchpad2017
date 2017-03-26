@@ -109,12 +109,15 @@ class EventController extends Controller
         if (!in_array($userId, $attending) && in_array($userId, $requests)) {
             $attending[] = (integer)$userId;
             ArrayHelper::removeValue($requests, (integer)$userId);
+
+            $event->requests = json_encode($requests);
+            $event->attending = json_encode($attending);
+            $event->save();
+
+            $user = User::findIdentity($userId);
+            $user->events_attended = $user->events_attended + 1;
+            $user->save();
         }
-
-        $event->requests = json_encode($requests);
-        $event->attending = json_encode($attending);
-
-        $event->save();
 
         $this->redirect(['/profile']);
     }

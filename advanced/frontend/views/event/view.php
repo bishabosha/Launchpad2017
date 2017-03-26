@@ -13,6 +13,7 @@ use common\models\Event;
 <?php
 $date = DateTime::createFromFormat('Y-m-d H:i:s', $event->timestamp);
 $userId = \yii::$app->user->id;
+$capacityLeft = $event->capacity - count($event->attendingArray);
 ?>
 
 <div class="page-header">
@@ -62,7 +63,7 @@ $userId = \yii::$app->user->id;
         <p>You'll get the location when your invitation is accepted.</p>
     </div>
 
-<?php elseif ($userId != $event->hostId && !in_array($userId, $event->requestArray)) : ?>
+<?php elseif ($userId != $event->hostId && !in_array($userId, $event->requestArray) && $capacityLeft > 0) : ?>
 
     <a href='<?= \yii\helpers\Url::to(["event/subscribe", 'id' => $event->eventId]) ?>' class="btn btn-info" role="button">Ask To Join</a>
 
@@ -70,6 +71,10 @@ $userId = \yii::$app->user->id;
         <h3>Location</h3>
         <p>You'll get the location when your invitation is accepted.</p>
     </div>
+
+<?php elseif ($userId != $event->hostId && !in_array($userId, $event->requestArray) && $capacityLeft == 0) : ?>
+
+    <span style="font-size: 1em;" class="label label-danger">The meal is full.</span>
 
 <?php else: ?>
 
@@ -97,7 +102,7 @@ $userId = \yii::$app->user->id;
 
 <div class = "page-header">
     <h3>Extra Info</h3>
-    <p><?= "Points per person: ". $event->price / $event->capacity ?></p>
+    <p><?= "Points per person: ". number_format($event->price / $event->capacity, 0) ?></p>
     <p><?= "Capacity: ". $event->capacity?></p>
-    <p><?= "Spaces Left: ". ($event->capacity - count($event->attendingArray)) ?></p>
+    <p><?= "Spaces Left: " . $capacityLeft ?></p>
 </div>
