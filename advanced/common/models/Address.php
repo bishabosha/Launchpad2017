@@ -14,6 +14,7 @@ use Yii;
  * @property string $city
  * @property string $postcode
  * @property integer $userId
+ * @property string $latlng
  *
  * @property string[] $shortFormat
  * @property Event[] $events

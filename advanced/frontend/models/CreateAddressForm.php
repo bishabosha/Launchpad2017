@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use common\models\Address;
+use common\models\GeoCoder;
 use yii\base\Model;
 
 class CreateAddressForm extends Model {
@@ -34,6 +35,14 @@ class CreateAddressForm extends Model {
         $address->postcode = $this->postcode;
 
         $address->userId = \Yii::$app->user->id;
+
+        if (!$address->save()) {
+            return null;
+        }
+
+        $coder = new GeoCoder();
+
+        $address->latlng = \GuzzleHttp\json_encode($coder->makeLatLngFromAddress($address));
 
         return $address->save() ? $address : null;
     }

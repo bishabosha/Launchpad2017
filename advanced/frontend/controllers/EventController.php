@@ -85,6 +85,9 @@ class EventController extends Controller
     public function actionTest() {
         $coder = new GeoCoder();
 
+
+
+
         $arr = $coder->makeLatLngFromAddress(Address::find()->where(['addressId' => 1])->one());
         throw new Exception(VarDumper::dumpAsString($arr));
     }

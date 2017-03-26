@@ -26,12 +26,7 @@ use common\models\Event;
 <div id="map"></div>
 <script>
     function initMap() {
-        <?php
-        $coder = new \common\models\GeoCoder();
-        $latlang = $coder->makeLatLngFromAddress($event->address);
-
-        ?>
-        var uluru = {lat: <?= $latlang->lat ?>, lng:  <?= $latlang->lng ?>};
+        var uluru = <?= $event->address->latlng ?>;
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
             center: uluru
