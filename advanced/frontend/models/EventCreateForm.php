@@ -20,7 +20,7 @@ class EventCreateForm extends Model {
             [['howMany', 'address'], 'integer'],
             ['price', 'double'],
             [['name', 'description'], 'string', 'max' => 255],
-            [['addressId'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['addressId' => 'address']],
+            [['address'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['addressId' => 'address']],
         ];
     }
 
