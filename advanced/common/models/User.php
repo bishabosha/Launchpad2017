@@ -23,12 +23,9 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $firstname
  * @property string $lastname
-<<<<<<< Updated upstream
  * @property \DateTime $joined
  * @property float $rating
-=======
  * @property string[] $formattedAddresses
->>>>>>> Stashed changes
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {

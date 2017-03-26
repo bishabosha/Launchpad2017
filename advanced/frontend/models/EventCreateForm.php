@@ -4,6 +4,8 @@ namespace frontend\models;
 use common\models\Address;
 use common\models\Event;
 use yii\base\Model;
+use yii\db\Exception;
+use yii\helpers\VarDumper;
 
 class EventCreateForm extends Model {
 
@@ -32,12 +34,16 @@ class EventCreateForm extends Model {
 
         $event = new Event();
         $event->name = $this->name;
-        $event->timestamp = $this->when;
+
+        $tempTime = \DateTime::createFromFormat('d-n-Y H:i', $this->when);
+        $event->timestamp = $tempTime->format('Y-m-d H:i:s');
+
         $event->price = $this->price;
         $event->capacity = $this->howMany;
         $event->addressId = $this->address;
         $event->description = $this->description;
         $event->hostId = \yii::$app->user->id;
+        $event->attending = "[]";
 
         return $event->save() ? $event : null;
     }
