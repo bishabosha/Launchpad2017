@@ -23,7 +23,7 @@ class EventController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'create'],
+                        'actions' => ['index', 'create', 'view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -74,7 +74,7 @@ class EventController extends Controller
 
     public function actionView($id) {
         return $this->render('view', [
-            'event' => Event::find()->where(['eventId' => $id])
+            'event' => Event::find()->where(['eventId' => $id])->one()
         ]);
     }
 }

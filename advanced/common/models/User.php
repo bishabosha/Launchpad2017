@@ -253,4 +253,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Event::findAll(['hostId' => $this->id]);
     }
+
+    public function getFullName(){
+        return $this->firstname. " ".$this->lastname;
+    }
 }

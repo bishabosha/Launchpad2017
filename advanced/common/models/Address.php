@@ -66,4 +66,8 @@ class Address extends \yii\db\ActiveRecord
     public function getShortFormat() {
         return $this->name . ", " . $this->street1;
     }
+
+    public function getFullFormat(){
+        return $this->name. " ". $this->street1. ", ". $this->city.", ". $this->postcode;
+    }
 }
