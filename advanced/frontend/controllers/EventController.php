@@ -27,7 +27,7 @@ class EventController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'create', 'view', 'test'],
+                        'actions' => ['index', 'create', 'view', 'all'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -82,13 +82,9 @@ class EventController extends Controller
         ]);
     }
 
-    public function actionTest() {
-        $coder = new GeoCoder();
-
-
-
-
-        $arr = $coder->makeLatLngFromAddress(Address::find()->where(['addressId' => 1])->one());
-        throw new Exception(VarDumper::dumpAsString($arr));
+    public function actionAll() {
+        return $this->render('viewAll', [
+            'events' => Event::find()->all()
+        ]);
     }
 }
