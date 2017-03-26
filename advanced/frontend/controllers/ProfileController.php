@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -60,6 +61,6 @@ class ProfileController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', ['user' => User :: findIdentity(yii :: $app -> user ->id)]);
     }
 }

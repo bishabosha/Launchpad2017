@@ -23,6 +23,8 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $firstname
  * @property string $lastname
+ * @property \DateTime $joined
+ * @property float $rating
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {

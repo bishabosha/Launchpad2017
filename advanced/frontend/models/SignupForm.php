@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use Faker\Provider\DateTime;
 use function Sodium\compare;
 use yii\base\Model;
 use common\models\User;
@@ -66,6 +67,8 @@ class SignupForm extends Model
         $user->lastname = $this->lastname;
         $user->email = $this->email;
         $user->bio = $this->bio;
+        date_default_timezone_set("Europe/London");
+        $user->joined = date("Y-m-d");
         $user->setPassword($this->password);
         $user->generateAuthKey();
         
