@@ -16,7 +16,7 @@ $this->title = "Nearby Meals";
                 <h5>Rating: <?=$host->rating ?></h5>
                 <h5>Date: <?= $date->format('d-n-Y H:i') ?></h5>
                 <h5>Points Per Person: <?= $event->price / $event->capacity ?></h5>
-                <a href=<?= \yii\helpers\Url::to(["event/view", 'id' => $event->eventId]) ?> class="btn btn-info" role="button">View More</a>
+                <a href='<?= \yii\helpers\Url::to(["event/view", 'id' => $event->eventId]) ?>' class="btn btn-info" role="button">View More</a>
             </div>
             <hr/>
         <?php endforeach; ?>

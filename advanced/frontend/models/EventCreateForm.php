@@ -42,6 +42,7 @@ class EventCreateForm extends Model {
         $event->description = $this->description;
         $event->hostId = \yii::$app->user->id;
         $event->attending = "[]";
+        $event->requests = "[]";
 
         return $event->save() ? $event : null;
     }

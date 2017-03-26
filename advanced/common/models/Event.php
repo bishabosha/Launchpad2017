@@ -12,7 +12,8 @@ use Yii;
  * @property string $timestamp
  * @property integer $price
  * @property integer $capacity
- * @property string $attending
+ * @property integer[] $attending
+ * @property string $requests
  * @property integer $hostId
  * @property integer $addressId
  * @property string $description
@@ -77,5 +78,31 @@ class Event extends \yii\db\ActiveRecord
     public function getHost()
     {
         return $this->hasOne(User::className(), ['id' => 'hostId']);
+    }
+
+    public function getRequestArray() {
+        return json_decode($this->requests, true);
+    }
+
+    public function getAttendingArray() {
+        return json_decode($this->attending, true);
+    }
+
+    public static function getRequestsFlat($userId) {
+        $events = Event::find()->where(['hostId' => $userId])->all();
+
+        $usersEvents = [];
+
+        foreach ($events as $event) {
+            $requests = $event->requestArray;
+            foreach ($requests as $userId) {
+                $usersEvents[] = [
+                    'user' => User::findIdentity($userId),
+                    'event' => $event
+                ];
+            }
+        }
+
+        return $usersEvents;
     }
 }

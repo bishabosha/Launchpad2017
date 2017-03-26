@@ -1,14 +1,11 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\Address;
 use common\models\Event;
-use common\models\GeoCoder;
 use common\models\User;
 use frontend\models\EventCreateForm;
 use Yii;
-use yii\base\Exception;
-use yii\helpers\VarDumper;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
@@ -27,7 +24,7 @@ class EventController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'create', 'view', 'all'],
+                        'actions' => ['index', 'create', 'view', 'all', 'subscribe', 'accept'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -74,6 +71,52 @@ class EventController extends Controller
             'model' => $model,
             'addresses' => User::findIdentity(yii::$app->user->id)->formattedAddresses
         ]);
+    }
+
+    public function actionSubscribe($id) {
+
+        $userId = \yii::$app->user->id;
+        $event = Event::find()->where(['eventId' => $id])->one();
+
+        if (!isset($event) || $userId == $event->hostId) {
+            $this->goBack();
+        }
+
+        $requests = $event->requestArray;
+
+        if (!in_array($userId, $requests)) {
+            $requests[] = $userId;
+        }
+
+        $event->requests = json_encode($requests);
+
+        $event->save();
+
+        $this->redirect(['/event/view', 'id' => $id]);
+    }
+
+    public function actionAccept($eventId, $userId) {
+
+        $event = Event::find()->where(['eventId' => $eventId])->one();
+
+        if (!isset($event) || $userId == $event->hostId) {
+            $this->goBack();
+        }
+
+        $attending = $event->attendingArray;
+        $requests = $event->requestArray;
+
+        if (!in_array($userId, $attending) && in_array($userId, $requests)) {
+            $attending[] = (integer)$userId;
+            ArrayHelper::removeValue($requests, (integer)$userId);
+        }
+
+        $event->requests = json_encode($requests);
+        $event->attending = json_encode($attending);
+
+        $event->save();
+
+        $this->redirect(['/profile']);
     }
 
     public function actionView($id) {

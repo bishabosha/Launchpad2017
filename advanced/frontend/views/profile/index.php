@@ -11,7 +11,7 @@ use common\models\User;
 <div class="page-header text-center">
     <h1 > <?= $user ->firstname ." ". $user->lastname ?></h1>
 </div>
-<a href=<?= \yii\helpers\Url::to(["profile/add-address"]) ?> class="btn btn-info" role="button">Add Address</a>
+
 <body>
 
     <div class="page-header">
@@ -42,6 +42,7 @@ use common\models\User;
         <?php foreach ($addresses as $address):?>
             <p><?= $address->name." ". $address->street1. ", ". $address->city.", ".$address->postcode?></p>
         <?php endforeach;?>
+        <a href=<?= \yii\helpers\Url::to(["profile/add-address"]) ?> class="btn btn-info" role="button">Add Address</a>
     </div>
 
     <div class="page-header">
@@ -52,6 +53,25 @@ use common\models\User;
         <?php $events = $user->getEvents(); ?>
         <?php foreach ($events as $event):?>
             <a href="<?= \yii\helpers\Url::to(["event/view", "id" => $event->eventId]) ?>" class="list-group-item"><?= $event->name ?></a>
+        <?php endforeach;?>
+    </div>
+
+    <div class="page-header">
+        <h3>Pending Requests</h3>
+    </div>
+
+    <div class="list-group">
+        <?php $requests = \common\models\Event::getRequestsFlat($user->id); ?>
+        <?php foreach ($requests as $pair):?>
+            <?php
+            $user = $pair['user'];
+            $event = $pair['event'];
+            ?>
+            <p>Name: <?= $user->firstname . ' ' . $user->lastname ?></p>
+            <p>Rating: <?= $user->rating ?></p>
+            <p>Event: <?= $event->name ?></p>
+            <a href="<?= \yii\helpers\Url::to(["event/accept", "eventId" => $event->eventId, 'userId' => $user->id]) ?>" class="btn btn-info"><span class="glyphicon glyphicon-ok"></span></a>
+            <hr/>
         <?php endforeach;?>
     </div>
 
