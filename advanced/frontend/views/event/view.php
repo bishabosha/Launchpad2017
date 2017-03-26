@@ -7,9 +7,9 @@ use common\models\Event;
 
 <div class="page-header text-center">
     <h1><?= $event->name ?></h1>
-<!--    <p1> By </br></p1>-->
     <p2><?=$event->host->getFullName()?></p2>
 </div>
+<button type="button" class="btn pull-right btn-primary">Ask To Join</button>
 
 <div class = "address-div">
     <div class="page-header">
@@ -25,3 +25,7 @@ use common\models\Event;
     <p> <?= $event->description?></p>
     <p><?= "Price: ". $event->price?>  </br>  <?= "Capacity: ". $event->capacity?>  </p>
 </div>
+
+
+
+
