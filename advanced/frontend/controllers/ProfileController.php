@@ -1,11 +1,8 @@
 <?php
 namespace frontend\controllers;
 
-<<<<<<< Updated upstream
 use common\models\User;
-=======
 use frontend\models\CreateAddressForm;
->>>>>>> Stashed changes
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;

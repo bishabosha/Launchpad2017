@@ -36,9 +36,10 @@ use common\models\User;
     </div>
 
     <div class="list-group">
-            <a href="#" class="list-group-item">Event 1</a>
-            <a href="#" class="list-group-item">Event 2</a>
-            <a href="#" class="list-group-item">Event 3</a>
+
+<!--            <a href="#" class="list-group-item">Event 1</a>-->
+<!--            <a href="#" class="list-group-item">Event 2</a>-->
+<!--            <a href="#" class="list-group-item">Event 3</a>-->
     </div>
 
 </body>
