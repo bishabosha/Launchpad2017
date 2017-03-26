@@ -12,12 +12,44 @@ use function GuzzleHttp\json_decode;
 class GeoCoder
 {
     private $client;
-    private $endpoint;
 
     function __construct()
     {
-        $this->endpoint = "https://maps.googleapis.com/maps/api/geocode/json";
         $this->client = new Client();
+    }
+
+    /**
+     * @param  $address \common\models\Address
+     * @return \stdClass
+     */
+    public function geoCodeAddress($address) {
+        $endpoint = "https://maps.googleapis.com/maps/api/geocode/json";
+        try {
+            $response = $this->client->get($endpoint, ['query' => [
+                'address' => $address->fullFormat,
+                'key' => \yii::$app->params['googleAPIKey']
+            ]]);
+
+            $rawBody = $response->getBody()->getContents();
+
+            try {
+                $resultArray = json_decode($rawBody);
+            } catch (\InvalidArgumentException $e) {
+                $resultArray = array();
+            }
+
+            return $resultArray;
+        } catch (ClientException $e) {
+            return null;
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+
+            if ($response instanceof ResponseInterface) {
+                // sometimes the response body is thrown as an exception but should be parsed
+                $rawBody = $e->getResponse()->getBody()->getContents();
+                return json_decode($rawBody);
+            }
+        }
     }
 
     /**
@@ -27,33 +59,11 @@ class GeoCoder
      */
     public function makeLatLngFromAddress($address) {
 
-        try {
-            $response = $this->client->get($this->endpoint, ['query' => [
-                'address' => $address->fullFormat,
-                'key' => \yii::$app->params['googleAPIKey']
-            ]]);
+        $coded = $this->geoCodeAddress($address);
 
-            $rawBody = $response->getBody()->getContents();
-
-            try {
-                $resultArray = json_decode($rawBody, true);
-            } catch (\InvalidArgumentException $e) {
-                $resultArray = array();
-            }
-
-            return $resultArray;
-        } catch (ClientException $e) {
-            throw new Exception($e->getResponse()->getBody());
-        } catch (RequestException $e) {
-            $response = $e->getResponse();
-
-            if ($response instanceof ResponseInterface) {
-                // sometimes the response body is thrown as an exception but should be parsed
-                $rawBody = $e->getResponse()->getBody()->getContents();
-                return json_decode($rawBody, true);
-            }
-
-            throw new Exception($e->getMessage());
+        if (isset($coded)) {
+            return $coded->results[0]->geometry->location;
         }
+        return null;
     }
 }
