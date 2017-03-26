@@ -1,6 +1,8 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
+use frontend\models\EventCreateForm;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -28,7 +30,7 @@ class EventController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'create'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -66,16 +68,17 @@ class EventController extends Controller
     public function actionCreate()
     {
         $model = new EventCreateForm();
-        if ($model->load(Yii::$app->request->post())) {
-//            if ($user = $model->signup()) {
-//                if (Yii::$app->getUser()->login($user)) {
-//                    return $this->goHome();
-//                }
-//            }
+        if ($model->load(Yii::$app->request->post()) && ($event = $model->create()) != null) {
+            return $this->redirect(['event/view', 'id' => $event->eventId]);
         }
 
-        return $this->render('signup', [
+        return $this->render('create', [
             'model' => $model,
+            'addresses' => User::findIdentity(yii::$app->user->id)->formattedAddresses
         ]);
+    }
+
+    public function actionView($id) {
+
     }
 }
