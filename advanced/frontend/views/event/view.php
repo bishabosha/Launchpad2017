@@ -92,8 +92,6 @@ $userId = \yii::$app->user->id;
     <p><?= "Points per person: ". $event->price / $event->capacity ?></p>
     <p><?= "Capacity: ". $event->capacity?></p>
     <p><?= "Spaces Left: ". ($event->capacity - count($event->attendingArray)) ?></p>
-    <p> <?= $event->description?></p>
-    <p><?= "Price: ". $event->price?>  </br>  <?= "Capacity: ". $event->capacity?>  </p>
 </div>
 
 <!--    <div>-->
