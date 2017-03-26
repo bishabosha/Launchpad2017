@@ -11,6 +11,7 @@ use common\models\User;
 <div class="page-header text-center">
     <h1 > <?= $user ->firstname ." ". $user->lastname ?></h1>
 </div>
+<a href=<?= \yii\helpers\Url::to(["profile/add-address"]) ?> class="btn btn-info" role="button">Add Address</a>
 <body>
 
     <div class="page-header">
@@ -50,7 +51,7 @@ use common\models\User;
     <div class="list-group">
         <?php $events = $user->getEvents(); ?>
         <?php foreach ($events as $event):?>
-            <a href="#" class="list-group-item"><?= $event->name ?></a>
+            <a href="<?= \yii\helpers\Url::to(["event/view", "id" => $event->eventId]) ?>" class="list-group-item"><?= $event->name ?></a>
         <?php endforeach;?>
     </div>
 
