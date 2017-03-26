@@ -38,7 +38,7 @@ class EventCreateForm extends Model {
         $tempTime = \DateTime::createFromFormat('d-n-Y H:i', $this->when);
         $event->timestamp = $tempTime->format('Y-m-d H:i:s');
 
-        $event->price = $this->price;
+        $event->price = round($this->price * 100);
         $event->capacity = $this->howMany;
         $event->addressId = $this->address;
         $event->description = $this->description;
