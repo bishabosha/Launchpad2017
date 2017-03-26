@@ -17,10 +17,10 @@ class EventCreateForm extends Model {
     public function rules(){
         return [
             [['name', 'price', 'howMany', 'address', 'description', 'when'], 'required'],
-            [['howMany', 'addressId'], 'integer'],
+            [['howMany', 'address'], 'integer'],
             ['price', 'double'],
             [['name', 'description'], 'string', 'max' => 255],
-            [['addressId'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['addressId' => 'addressId']],
+            [['addressId'], 'exist', 'skipOnError' => true, 'targetClass' => Address::className(), 'targetAttribute' => ['addressId' => 'address']],
         ];
     }
 
