@@ -1,10 +1,14 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Address;
 use common\models\Event;
+use common\models\GeoCoder;
 use common\models\User;
 use frontend\models\EventCreateForm;
 use Yii;
+use yii\base\Exception;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 
@@ -23,7 +27,7 @@ class EventController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'create', 'view'],
+                        'actions' => ['index', 'create', 'view', 'test'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -76,5 +80,12 @@ class EventController extends Controller
         return $this->render('view', [
             'event' => Event::find()->where(['eventId' => $id])->one()
         ]);
+    }
+
+    public function actionTest() {
+        $coder = new GeoCoder();
+
+        $arr = $coder->makeLatLngFromAddress(Address::find()->where(['addressId' => 1])->one());
+        throw new Exception(VarDumper::dumpAsString($arr));
     }
 }
