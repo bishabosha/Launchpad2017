@@ -235,7 +235,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getFormattedAddresses()
     {
-        $list = $this->hasMany(Address::className(), ['userId' => 'id'])->all();
+        $list = $this->getAddresses()->all();
 
         $formatted = [];
 
@@ -244,5 +244,13 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
         return $formatted;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEvents()
+    {
+        return Event::findAll(['hostId' => $this->id]);
     }
 }
