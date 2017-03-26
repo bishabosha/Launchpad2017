@@ -1,7 +1,11 @@
 <?php
 namespace frontend\controllers;
 
+<<<<<<< Updated upstream
 use common\models\User;
+=======
+use frontend\models\CreateAddressForm;
+>>>>>>> Stashed changes
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -29,7 +33,7 @@ class ProfileController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'add-address'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -62,5 +66,18 @@ class ProfileController extends Controller
     public function actionIndex()
     {
         return $this->render('index', ['user' => User :: findIdentity(yii :: $app -> user ->id)]);
+    }
+
+    public function actionAddAddress() {
+
+        $model = new CreateAddressForm();
+
+        if ($model->load(yii::$app->request->post()) && $model->create() != null) {
+            return $this->redirect(['/profile/index']);
+        }
+
+        return $this->render('addAddress', [
+            'model' => $model
+        ]);
     }
 }

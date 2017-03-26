@@ -13,7 +13,9 @@ use Yii;
  * @property string $street2
  * @property string $city
  * @property string $postcode
+ * @property integer $userId
  *
+ * @property string[] $shortFormat
  * @property Event[] $events
  */
 class Address extends \yii\db\ActiveRecord
@@ -34,6 +36,7 @@ class Address extends \yii\db\ActiveRecord
         return [
             [['name', 'street1', 'city', 'postcode'], 'required'],
             [['name', 'street1', 'street2', 'city', 'postcode'], 'string', 'max' => 255],
+            [['userId'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['userId' => 'id']],
         ];
     }
 
@@ -58,5 +61,9 @@ class Address extends \yii\db\ActiveRecord
     public function getEvents()
     {
         return $this->hasMany(Event::className(), ['addressId' => 'addressId']);
+    }
+
+    public function getShortFormat() {
+        return $this->name . ", " . $this->street1;
     }
 }
