@@ -39,9 +39,7 @@ class GeoCoder
             }
 
             return $resultArray;
-        } catch (ClientException $e) {
-            return null;
-        } catch (RequestException $e) {
+        }catch (RequestException $e) {
             $response = $e->getResponse();
 
             if ($response instanceof ResponseInterface) {

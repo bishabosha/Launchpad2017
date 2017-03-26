@@ -23,7 +23,7 @@ use common\models\Event;
         width: 100%;
     }
 </style>
-
+<div id="map"></div>
 <script>
     function initMap() {
         <?php
@@ -34,10 +34,10 @@ use common\models\Event;
         var uluru = {lat: <?= $latlang->lat ?>, lng:  <?= $latlang->lng ?>};
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
-            center: <?= $event->address->city?>
+            center: uluru
         });
         var marker = new google.maps.Marker({
-            position: <?= $event->address->getFullFormat() ?>,
+            position: uluru,
             map: map
         });
     }
