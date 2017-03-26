@@ -4,8 +4,6 @@ namespace frontend\models;
 use common\models\Address;
 use common\models\Event;
 use yii\base\Model;
-use yii\db\Exception;
-use yii\helpers\VarDumper;
 
 class EventCreateForm extends Model {
 

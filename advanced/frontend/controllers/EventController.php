@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Event;
 use common\models\User;
 use frontend\models\EventCreateForm;
 use Yii;
@@ -72,6 +73,8 @@ class EventController extends Controller
     }
 
     public function actionView($id) {
-
+        return $this->render('view', [
+            'event' => Event::find()->where(['eventId' => $id])
+        ]);
     }
 }
